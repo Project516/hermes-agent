@@ -25,7 +25,7 @@ hermes-agent/
 └── website/              # Docusaurus docs site
 ```
 
-Config: `~/.hermes/config.yaml` (settings), `~/.hermes/.env` (API keys) — both under `$HERMES_HOME` when it is set.
+Config: `~/.hermes/config.yaml` (settings), `~/.hermes/.env` (API keys), both under `$HERMES_HOME` when it is set.
 
 ### Adding a Tool
 
@@ -55,12 +55,12 @@ registry.register(
 )
 ```
 
-**2. Wire it into a toolset in `toolsets.py`** — add the name to
+**2. Wire it into a toolset in `toolsets.py`**: add the name to
 `_HERMES_CORE_TOOLS` (every platform) or to a specific toolset.
 
 All handlers must return JSON strings. Use `get_hermes_home()` for paths,
 never hardcode `~/.hermes`. For custom/local-only tools, write a plugin in
-`~/.hermes/plugins/` instead of editing core — see the developer docs.
+`~/.hermes/plugins/` instead of editing core: see the developer docs.
 
 ### Adding a Slash Command
 
@@ -84,9 +84,9 @@ run_conversation():
 
 ### Testing
 
-Use the canonical runner — it enforces CI-parity (hermetic `env -i`, unset
+Use the canonical runner: it enforces CI-parity (hermetic `env -i`, unset
 credentials, TZ=UTC, per-file subprocess isolation via
-`scripts/run_tests_parallel.py` — no xdist, worker count auto-scaled):
+`scripts/run_tests_parallel.py`: no xdist, worker count auto-scaled):
 
 ```bash
 scripts/run_tests.sh                          # full suite
@@ -95,7 +95,7 @@ scripts/run_tests.sh tests/tools/test_x.py    # one file
 scripts/run_tests.sh -v --tb=long             # pass-through pytest flags
 ```
 
-- Tests auto-redirect `HERMES_HOME` to temp dirs — never touch real `~/.hermes/`.
+- Tests auto-redirect `HERMES_HOME` to temp dirs: never touch real `~/.hermes/`.
 - The script probes `.venv`, then `venv`, then the shared worktree venv.
 - **Windows:** the wrapper is POSIX-only; see `references/windows-quirks.md`
   for the direct-pytest workaround.
@@ -122,7 +122,7 @@ Factual host/backend guidance (OS, `$HOME`, cwd, terminal backend, shell)
 is emitted by `agent/prompt_builder.py::build_environment_hints()`. The key
 invariant for prompt authors: with a **remote** terminal backend
 (`docker, singularity, modal, daytona, ssh, managed_modal`), host info is
-suppressed and *every* file tool runs inside the backend container — the
+suppressed and *every* file tool runs inside the backend container: the
 prompt must never describe the host the agent can't touch.
 
 ### Commit Conventions
@@ -137,8 +137,8 @@ Types: `fix:`, `feat:`, `refactor:`, `docs:`, `chore:`
 
 ### Key Rules
 
-- **Never break prompt caching** — don't change context, tools, or system prompt mid-conversation
-- **Message role alternation** — never two assistant or two user messages in a row
+- **Never break prompt caching**: don't change context, tools, or system prompt mid-conversation
+- **Message role alternation**: never two assistant or two user messages in a row
 - Use `get_hermes_home()` from `hermes_constants` for all paths (profile-safe)
 - Config values go in `config.yaml`, secrets go in `.env`
 - New tools need a `check_fn` so they only appear when requirements are met
